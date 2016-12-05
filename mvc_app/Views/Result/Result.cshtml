@@ -5,10 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Result</h2>
+<h2>Result for @ViewBag.gitHubRepository</h2>
 
 <p>
-	<label>Total amount of issues issues_AllOpen:&nbsp;</label>@ViewBag.issues_AllOpen
-	<label>Total amount of issues issues_OpeninLast24Hours:&nbsp;</label>@ViewBag.issues_OpeninLast24Hours
-	<label>Total amount of issues issues_OpenMoreThan7Days:&nbsp;</label>@ViewBag.issues_OpenMoreThan7Days
+	<ul>
+		<li>
+			<label>Total amount of issues issues_AllOpen:&nbsp;</label>@ViewBag.issues_AllOpen			
+		</li>
+		<li>
+			<label>Total amount of issues issues_OpeninLast24Hours:&nbsp;</label>@ViewBag.issues_OpeninLast24Hours			
+		</li>
+		<li>
+			<label>Total amount of issues issues_OpenMoreThan7Days:&nbsp;</label>@ViewBag.issues_OpenMoreThan7Days			
+		</li>
+	</ul>
 </p>
