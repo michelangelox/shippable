@@ -1,22 +1,27 @@
 ﻿@model IEnumerable<mvc_app.RouteConfig>
 
 @{
-    ViewBag.Title = "Result";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Result";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Result for @ViewBag.gitHubRepository</h2>
+<h2>Results for @ViewBag.gitHubRepository</h2>
 
 <p>
 	<ul>
 		<li>
-			<label>Total amount of issues issues_AllOpen:&nbsp;</label>@ViewBag.issues_AllOpen			
+			<label>Total amount of issues issues_AllOpen:&nbsp;</label>@ViewBag.issues_AllOpen
 		</li>
 		<li>
-			<label>Total amount of issues issues_OpeninLast24Hours:&nbsp;</label>@ViewBag.issues_OpeninLast24Hours			
+			<label>Total amount of issues issues_OpeninLast24Hours:&nbsp;</label>@ViewBag.issues_OpeninLast24Hours
 		</li>
 		<li>
-			<label>Total amount of issues issues_OpenMoreThan7Days:&nbsp;</label>@ViewBag.issues_OpenMoreThan7Days			
+			<label>Total amount of issues issues_OpenMoreThan7Days:&nbsp;</label>@ViewBag.issues_OpenMoreThan7Days
 		</li>
 	</ul>
+</p>
+
+<p>
+
+
 </p>

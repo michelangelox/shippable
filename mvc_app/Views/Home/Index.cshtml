@@ -1,17 +1,17 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+	ViewBag.Title = "Home Page";
 }
 
 <div class="header">
-    <h1>Github project repository</h1>
-	<p class="lead">
-		<label>
-			Github https url: <input type='text' name='guthuburl' id='githuburl'>
-		</label>
-	</p>
-    <p><a href="../Result/result" class="btn btn-primary btn-lg">Go!</a></p>
+	<h1>Github project repository</h1>
 </div>
 
 <div class="row result">
-    
+	
+	<form action="/Result/result" method="POST">
+		<label>https://github.com/&nbsp;</label>
+		<input type="text" name="GitHubUserName" value="miguelmoreno">&nbsp;/&nbsp;
+		<input type="text" name="GitHubRepository" value="shippable">&nbsp;
+		<input type="submit" value="GitHubRepositoryData">
+	</form>
 </div>
