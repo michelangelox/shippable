@@ -16,51 +16,72 @@ namespace mvc_app.Controllers
 	public class Issues
 	{
 		public int IssueId;
-		
+		private readonly string GitHubUserName = "miguelmoreno";
+		private readonly string GitHubRepository = "shippable";
+		private readonly string GitHubAccessToken = "2ffa71b8d7be587f779268b0b888763fd13e9f4a";
 
-		public async Task<string> getIssues(string url) {
+		internal RepositoryIssueRequest issues_AllOpen = new RepositoryIssueRequest
+		{ 
+			Filter = IssueFilter.All,
+			State = ItemStateFilter.Open
+		};
 
-			GitHubClient client = new GitHubClient(new ProductHeaderValue("Shippable"));
-			Credentials tokenAuth = new Credentials("2ffa71b8d7be587f779268b0b888763fd13e9f4a");
+		internal RepositoryIssueRequest issues_OpeninLast24Hours = new RepositoryIssueRequest
+		{
+			Filter = IssueFilter.All,
+			State = ItemStateFilter.Open,
+			Since = DateTimeOffset.Now.Subtract(TimeSpan.FromHours(24))
+		};
+
+		//internal IssueRequest issues_OpeninLast24HoursButLessThan7Days = new IssueRequest
+		//{
+		//	Filter = IssueFilter.All,
+		//	State = ItemState.All,
+		//	Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(14))
+		//};
+
+		internal RepositoryIssueRequest issues_OpenMoreThan7Days = new RepositoryIssueRequest
+		{
+			Filter = IssueFilter.All,
+			State = ItemStateFilter.Open,
+			Since = DateTimeOffset.Now.AddDays(7)
+		};
+
+		public string getIssues(string url) {
+
+			GitHubClient client = new GitHubClient(new ProductHeaderValue(GitHubRepository));
+			Credentials tokenAuth = new Credentials(GitHubAccessToken);
 			client.Credentials = tokenAuth;
 
+			//TODO: move string to web.config file 
 			User user = client.User.Get("miguelmoreno").Result; ;
 
-			Console.WriteLine("{0} has {1} public repositories - go check out their profile at {2}",
-				user.Name,
-				user.PublicRepos,
-				user.Url);
+			//TODO: move string to web.config file
+			var allIssuesForShippableRepository = client.Issue.GetAllForRepository(GitHubUserName, GitHubRepository).Result;
 
-			var issues = client.Issue.GetAllForRepository("miguelmoreno", "shippable").Result;
-			var issuesShippable = client.Issue.GetAllForRepository("miguelmoreno", "shippable").Result;
+			var issueCollectionForRepo = client.Issue;
+
+			var _issues_AllOpenEver = issueCollectionForRepo.GetAllForRepository(GitHubUserName, GitHubRepository, issues_AllOpen).Result;
+			var _issues_OpeninLast24Hours = issueCollectionForRepo.GetAllForRepository(GitHubUserName, GitHubRepository, issues_OpeninLast24Hours).Result;
+			var _issues_OpenMoreThan7Days = issueCollectionForRepo.GetAllForRepository(GitHubUserName, GitHubRepository, issues_OpenMoreThan7Days).Result;
+
 			//-------
-			HttpWebRequest issuesRequest = WebRequest.Create(url) as HttpWebRequest;
-			issuesRequest.UserAgent = "Shippable";
-			issuesRequest.Method = "GET";
-			WebResponse issuesResponse = issuesRequest.GetResponse();
-
-			Stream receiveStream = issuesResponse.GetResponseStream();
-			StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
-			string content = reader.ReadToEnd();
-
-			return content;
+			return "";
 		}
 
 	}
 
 	public class ResultController : Controller
     {
-		
-
-		private static string url = @"https://api.github.com/repos/miguelmoreno/shippable/issues -u 'miguelmoreno:2ffa71b8d7be587f779268b0b888763fd13e9f4a'";
 		// GET: Result
 		public ActionResult Result()
         {
-			ViewBag.TotalIssues = 10;
+			Issues _issues = new Issues();
+	        var poep = _issues.getIssues("");
 
-			Issues IssueRequest = new Issues();
-	        var poep = IssueRequest.getIssues(url);
-			ViewBag.IssueRequest = poep;
+			//ViewBag.issues_AllOpen = _issues_AllOpenEver;
+
+			ViewBag.IssueRequest = "100";
 
 			return View();
         }
