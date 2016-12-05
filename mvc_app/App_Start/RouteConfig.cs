@@ -18,6 +18,12 @@ namespace mvc_app
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
 			);
+
+			routes.MapRoute(
+				name: "Result",
+				url: "{controller}/{action}/{id}",
+				defaults: new { controller = "Result", action = "Result", id = UrlParameter.Optional }
+			);
 		}
 	}
 }
