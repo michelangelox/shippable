@@ -20,9 +20,9 @@ namespace mvc_app
 			);
 
 			routes.MapRoute(
-				name: "Result",
+				name: "Results",
 				url: "{controller}/{action}/{id}",
-				defaults: new {controller = "Result", action = "Result", id = UrlParameter.Optional}
+				defaults: new {controller = "Home", action = "Results", id = UrlParameter.Optional}
 			);
 		}
 	};

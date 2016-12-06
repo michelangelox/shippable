@@ -2,16 +2,14 @@
 	ViewBag.Title = "Home Page";
 }
 
-<div class="header">
-	<h1>Github project repository</h1>
-</div>
+<h2 class="header">Github project repository</h2>
 
-<div class="row result">
-	
-	<form action="/Result/result" method="POST">
-		<label>https://github.com/&nbsp;</label>
-		<input type="text" name="GitHubUserName" value="miguelmoreno">&nbsp;/&nbsp;
-		<input type="text" name="GitHubRepository" value="shippable">&nbsp;
-		<input type="submit" value="GitHubRepositoryData">
-	</form>
-</div>
+<fieldset>
+	<ul>
+		<li>
+			@Html.Label("GitHub Repository Url: ");
+			@Html.TextBox("GitHubRespositoryUrl", @"https://github.com/Shippable/docsv2/", new { style = "width: 300px;color: #666666;padding:5px;"});
+			@Html.ActionLink("Get issues", $"Results", $"Home", new {id= ""}, null); 
+		</li>
+	</ul>
+</fieldset>
