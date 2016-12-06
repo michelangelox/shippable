@@ -1,20 +1,87 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using mvc_app.Classes;
 using mvc_app.Models;
+using Octokit;
 
 namespace mvc_app.Controllers
 {
 	public class ResultController : Controller
 	{
+		//TODO: move static strings to web.config file
+		private readonly string GitHubUserOwner = "miguelmoreno";
+		private readonly string GitHubUserAgent = "-iH 'User-Agent: ' https://api.github.com/meta";
+		private readonly string GitHubRepository = "shippable";
+
+		private readonly string GitHubAccessToken = "fd34eff590b7053eb472bd4fd8d396eca68583aa";
 
 		public ActionResult Result()
 		{
 			throw new NotImplementedException();
 		}
 
-		public ActionResult Index(RepositoryModel respository)
+		public ActionResult Index(RepositoryModel repository)
 		{
+			var repositoryUrl = repository.RepositoryUrl;
+
+			if (repositoryUrl != null)
+			{
+				try
+				{ 
+					//ValidateRequest hithub url must contain at least 4 //
+					//TODO: harden this fault logic - use REGEX
+
+					//strip http and Github.com domain
+					repositoryUrl = (repositoryUrl.IndexOf(@"https://github.com/") > 0) ? repositoryUrl : repositoryUrl.Replace(@"https://github.com/", "");
+					//strip if http:// had no s
+					repositoryUrl = (repositoryUrl.IndexOf(@"http://github.com/") > 0 )? repositoryUrl : repositoryUrl.Replace(@"http://github.com/", "");
+					//strip last lingering, if any, slash and everythiung after that
+					var fistslash = repositoryUrl.IndexOf(@"/");
+					repositoryUrl = (fistslash < repositoryUrl.Length-1) ? repositoryUrl : repositoryUrl.Substring(0, repositoryUrl.LastIndexOf(@"/"));
+
+					Char delimiter = '/';
+					var DomainSections = repositoryUrl.Split(delimiter);
+
+					//HACK: make this logic better and moren fault proof
+					repository.RepositoryOwner = DomainSections[0];
+					repository.RepositoryName = DomainSections[1];
+
+					//Client authentication
+					//GitHubClient client = new GitHubClient(new ProductHeaderValue(repository.RepositoryName));
+					//Credentials tokenAuth = new Credentials(GitHubAccessToken);
+					//client.Credentials = tokenAuth;
+
+					//User retrieval
+					//User user = client.User.Get(repository.RepositoryOwner).Result;
+
+					//All issues for specified repository 
+					//var issuesAllForShippableRepository = client.Issue.GetAllForRepository(GitHubUserOwner, GitHubRepository).Result;
+
+					//TODO: Check if repository exists
+					//TODO: any other error from GitHub render in error form
+
+					//var issueCollectionForRepo = client.Issue;
+					repository.RepositoryToken = "fd34eff590b7053eb472bd4fd8d396eca68583aa";
+
+					IssuesHelper IssuesHelper = new IssuesHelper();
+
+					var issues = IssuesHelper.getIssuesForDefinedRepository(repository.RepositoryName, repository.RepositoryOwner, repository.RepositoryToken);
+					var poep = issues;
+
+					ViewBag.issues_AllOpen = IssuesHelper.IssuesAllOpen;
+					ViewBag.issues_OpeninLast24Hours = IssuesHelper.Issues_OpeninLast24Hours;
+					ViewBag.issues_OpenMoreThan7Days = IssuesHelper.Issues_OpenMoreThan7Days;
+
+					return View();
+				}
+
+				catch (Exception ex)
+				{
+					throw;
+				}
+			}
+
 			return View();
 		}
 
