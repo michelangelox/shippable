@@ -22,7 +22,7 @@ namespace mvc_app
 			routes.MapRoute(
 				name: "Results",
 				url: "{controller}/{action}/{id}",
-				defaults: new {controller = "Home", action = "Results", id = UrlParameter.Optional}
+				defaults: new {controller = "Result", action = "Index", id = UrlParameter.Optional}
 			);
 		}
 	};

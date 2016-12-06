@@ -7,9 +7,17 @@
 <fieldset>
 	<ul>
 		<li>
-			@Html.Label("GitHub Repository Url: ");
-			@Html.TextBox("GitHubRespositoryUrl", @"https://github.com/Shippable/docsv2/", new { style = "width: 300px;color: #666666;padding:5px;"});
-			@Html.ActionLink("Get issues", $"Results", $"Home", new {id= ""}, null); 
+			@model mvc_app.Models.RepositoryModel
+
+			@using (Html.BeginForm($"Index", $"Result", FormMethod.Post))
+
+			{
+				//passes the input GitHub repository URL into the form for the ResultController to interpret
+				@Html.TextBox("RepositoryUrl", @"https://github.com/Shippable/docsv2/", new { style = "width: 300px;color: #666666;padding:5px;" }) ;
+
+				//submits the form
+				<input type="submit" value="Get issues" />
+			}
 		</li>
 	</ul>
 </fieldset>

@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Web.Mvc;
 using mvc_app.Classes;
+using mvc_app.Models;
 
 namespace mvc_app.Controllers
 {
 	public class ResultController : Controller
 	{
-		[HttpPost]
+
+		public ActionResult Result()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionResult Index(RepositoryModel respository)
+		{
+			return View();
+		}
+
+		/*
 		public string Results(string gitlHubRepository)
 		{
 			if (gitlHubRepository != null)
@@ -23,6 +35,7 @@ namespace mvc_app.Controllers
 		}
 
 		// GET: Result
+		
 		public ActionResult Result()
         {
 			IssuesHelper _issues = new IssuesHelper();
@@ -37,6 +50,7 @@ namespace mvc_app.Controllers
 
 			return View();
         }
+		*/
 
 	}
 }

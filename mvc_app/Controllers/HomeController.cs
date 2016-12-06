@@ -22,10 +22,8 @@ namespace mvc_app.Controllers
 		}
 		*/
 
-		[HttpPost]
-		public ActionResult Results(string repository){
-			return Content(
-				"Received Respository: ");
+		public ActionResult Result(){
+			return Content("Received Respository");
 		}
 
 		/*
