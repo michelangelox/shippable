@@ -14,6 +14,7 @@ namespace mvc_app.Controllers
 		public ActionResult Index(RepositoryModel repository)
 		{
 			var repositoryUrl = repository.RepositoryUrl;
+			ViewBag.repositoryUrl = repositoryUrl;
 
 			if (repositoryUrl != null)
 			{
@@ -43,8 +44,12 @@ namespace mvc_app.Controllers
 
 					IssuesHelper issuesHelper = new IssuesHelper();
 
+					//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					//!! This returns the entire collection of issues with dates, authors, replies, and message content for all issues for the corresponding repo. This was not aslked in the exercise, but will be incredibly handy in rendereing on the Resultspage. Not implemented, but data is available to use. 
 					List<IReadOnlyList<Issue>> collectionOfissues = issuesHelper.GetIssuesForDefinedRepository(repository.RepositoryName, repository.RepositoryOwner, repository.RepositoryToken);
+					//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+					//Below only what was asked, which was the amount of issues per criteria. 
 					ViewBag.issues_AllOpen = issuesHelper.IssuesAllOpen;
 					ViewBag.issues_OpeninLast24Hours = issuesHelper.IssuesOpeninLast24Hours;
 					ViewBag.issues_OpenMoreThan7Days = issuesHelper.IssuesOpenMoreThan7Days;
@@ -57,44 +62,7 @@ namespace mvc_app.Controllers
 					throw;
 				}
 			}
-
-			ViewBag.issues_AllOpen = 100;
 			return View();
 		}
-
-		/*
-		public string Results(string gitlHubRepository)
-		{
-			if (gitlHubRepository != null)
-			{
-				return String.Format(gitlHubRepository);
-			}
-
-			if (gitlHubRepository == null)
-			{
-				return "gitlHubRepository does not exist...";
-			}
-
-			return "error";
-		}
-
-		// GET: Result
-		
-		public ActionResult Result()
-        {
-			IssuesHelper _issues = new IssuesHelper();
-	        var GitHubRepository = "shippable";
-	        var GitHubUserOwner = "miguelmoreno";
-
-			var issues = _issues.getIssuesForDefinedRepository(GitHubRepository, GitHubUserOwner);
-
-	        ViewBag.issues_AllOpen = _issues.IssuesAllOpen;
-			ViewBag.issues_OpeninLast24Hours = _issues.Issues_OpeninLast24Hours;
-			ViewBag.issues_OpenMoreThan7Days = _issues.Issues_OpenMoreThan7Days;
-
-			return View();
-        }
-		*/
-
 	}
 }
