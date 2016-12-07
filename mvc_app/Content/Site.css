@@ -26,3 +26,8 @@ textarea {
 input#GitHubRespositoryUrl {
 	width: 500px;
 }
+
+h2.githuburl {
+	font-size: 0.8em;
+	color: #666666;
+}
