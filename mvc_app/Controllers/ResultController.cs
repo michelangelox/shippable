@@ -37,7 +37,10 @@ namespace mvc_app.Controllers
 					//HACK: make this logic better and moren fault proof
 					repository.RepositoryOwner = domainSections[0];
 					repository.RepositoryName = domainSections[1];
-					repository.RepositoryToken = ConfigurationManager.AppSettings["GitHubAccessToken"].ToString();
+					//repository.RepositoryToken = ConfigurationManager.AppSettings["GitHubAccessToken"].ToString();
+					var environmentVariable = Environment.GetEnvironmentVariable("GitHubAccessToken");
+					if (environmentVariable != null)
+						repository.RepositoryToken = environmentVariable.ToString();
 
 					//TODO: Check if repository exists
 					//TODO: any other error from GitHub render in error form
