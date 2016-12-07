@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Octokit;
 
 namespace mvc_app.Classes
@@ -8,68 +9,78 @@ namespace mvc_app.Classes
 		public int IssueId;
 
 		public int IssuesAllOpen { get; set; } = -1;
-		public int Issues_OpeninLast24Hours { get; set; } = -1;
-		public int Issues_OpenMoreThan7Days { get; set; } = -1;
+		public int IssuesOpeninLast24Hours { get; set; } = -1;
+		public int IssuesOpenMoreThan7Days { get; set; } = -1;
 
 		//Predefined filters for issues
-		internal RepositoryIssueRequest _issues_AllOpen = new RepositoryIssueRequest
+		private readonly RepositoryIssueRequest _issuesAllOpen = new RepositoryIssueRequest
 		{
 			Filter = IssueFilter.All,
 			State = ItemStateFilter.Open
 		};
 
-		internal RepositoryIssueRequest _issues_OpeninLast24Hours = new RepositoryIssueRequest
+		private readonly RepositoryIssueRequest _issuesOpeninLast24Hours = new RepositoryIssueRequest
 		{
 			Filter = IssueFilter.All,
 			State = ItemStateFilter.Open,
 			Since = DateTimeOffset.Now.Subtract(TimeSpan.FromHours(24))
 		};
 
-		//TODO: incorporate this filter in the list
-		//internal IssueRequest _issues_OpeninLast24HoursButLessThan7Days = new IssueRequest
-		//{
-		//	Filter = IssueFilter.All,
-		//	State = ItemState.All,
-		//	Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(14))
-		//};
-
-		internal RepositoryIssueRequest _issues_OpenMoreThan7Days = new RepositoryIssueRequest
+		private readonly RepositoryIssueRequest _issuesOpenMoreThan7Days = new RepositoryIssueRequest
 		{
 			Filter = IssueFilter.All,
 			State = ItemStateFilter.Open,
 			Since = DateTimeOffset.Now.AddDays(7)
 		};
 
-		public string getIssuesForDefinedRepository(string gitlHubRepository, string gitHubOwner, string GitHubAccessToken)
+		public List<IReadOnlyList<Issue>> GetIssuesForDefinedRepository(string gitlHubRepository, string gitHubOwner, string gitHubAccessToken)
 		{
-			//Client authentication
-			GitHubClient client = new GitHubClient(new ProductHeaderValue(gitlHubRepository));
-			Credentials tokenAuth = new Credentials(GitHubAccessToken);
-			client.Credentials = tokenAuth;
+			try
+			{
+				List<IReadOnlyList<Issue>> collectionOfIssues = new List<IReadOnlyList<Issue>>();
 
-			//User retrieval
-			User user = client.User.Get(gitHubOwner).Result; ;
+				//Client authentication
+				GitHubClient client = new GitHubClient(new ProductHeaderValue(gitlHubRepository));
+				Credentials tokenAuth = new Credentials(gitHubAccessToken);
+				client.Credentials = tokenAuth;
 
-			//All issues for specified repository 
-			var issuesAllForShippableRepository = client.Issue.GetAllForRepository(gitHubOwner, gitlHubRepository).Result;
+				//User retrieval
+				User user = client.User.Get(gitHubOwner).Result;
+				;
 
-			//TODO: Check if repository exists
-			//TODO: any other error from GitHub render in error form
+				//All issues for specified repository 
+				var issuesAllForShippableRepository = client.Issue.GetAllForRepository(gitHubOwner, gitlHubRepository).Result;
 
-			var issueCollectionForRepo = client.Issue;
+				//TODO: Check if repository exists
+				//TODO: any other error from GitHub render in error form
 
-			//Issues filtered by defined parameteres
-			var issuesAllOpenEver = issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issues_AllOpen).Result;
-			this.IssuesAllOpen = issuesAllOpenEver.Count;
+				var issueCollectionForRepo = client.Issue;
 
-			var issuesOpeninLast24Hours = issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issues_OpeninLast24Hours).Result;
-			this.Issues_OpeninLast24Hours = issuesOpeninLast24Hours.Count;
+				//Issues filtered by defined parameteres
+				var issuesAllOpenEver = 
+					issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issuesAllOpen).Result;
+				this.IssuesAllOpen = issuesAllOpenEver.Count;
+			
+				var issuesOpeninLast24Hours =
+					issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issuesOpeninLast24Hours).Result;
+				this.IssuesOpeninLast24Hours = issuesOpeninLast24Hours.Count;
 
-			var issuesOpenMoreThan7Days = issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issues_OpenMoreThan7Days).Result;
-			this.Issues_OpenMoreThan7Days = issuesOpenMoreThan7Days.Count;
+				var issuesOpenMoreThan7Days =
+					issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issuesOpenMoreThan7Days).Result;
+				this.IssuesOpenMoreThan7Days = issuesOpenMoreThan7Days.Count;
 
-			//TODO: return serialized JSON object or error from GitHub 
-			return "";
+				collectionOfIssues.Add(issuesAllOpenEver);
+				collectionOfIssues.Add(issuesOpeninLast24Hours);				
+				collectionOfIssues.Add(issuesOpenMoreThan7Days);
+
+				return collectionOfIssues;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+
+			return null;
 		}
 	}
 
