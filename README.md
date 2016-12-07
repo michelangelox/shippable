@@ -21,7 +21,12 @@ Output: Your UI should display a table with the following information
 
 	- Site is very simple MVC 5 ASP.NET site with two pages [Home and Result]. 
       - Home takes in the url, hwere it undergoes some simple validation (needs to be hardened)
-      - Result uses the OctoKit .NET GitHub Client Library and extracts the issues from the passed-in repository. 
+      - Result uses the OctoKit .NET GitHub Client Library (https://github.com/octokit/octokit.net) and extracts the issues from the passed-in repository. 
 
       - although the result page returns just the **amount** of issues per filtered standard as requested, the **/Classes/IssueHelper Class** collects all the information of each issue, including date, author, comment, etc and returns it to the view for eventual parsing. 
-    - 
+
+
+### Needed if I had more time
+	- More tests
+	- harden the input value validation
+	- render the full data of all the issues.  
