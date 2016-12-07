@@ -38,7 +38,7 @@ namespace mvc_app.Controllers
 					repository.RepositoryOwner = domainSections[0];
 					repository.RepositoryName = domainSections[1];
 					//repository.RepositoryToken = ConfigurationManager.AppSettings["GitHubAccessToken"].ToString();
-					var environmentVariable = Environment.GetEnvironmentVariable("GitHubAccessToken");
+					string environmentVariable = Environment.GetEnvironmentVariable("GitHubAccessToken");
 					if (environmentVariable != null)
 						repository.RepositoryToken = environmentVariable.ToString();
 
