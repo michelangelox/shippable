@@ -44,11 +44,10 @@ namespace mvc_app.Classes
 				Credentials tokenAuth = new Credentials(gitHubAccessToken);
 				client.Credentials = tokenAuth;
 
-				//User retrieval
+				//User retrieval - not required
 				User user = client.User.Get(gitHubOwner).Result;
-				;
 
-				//All issues for specified repository 
+				//All issues for specified repository - not required
 				var issuesAllForShippableRepository = client.Issue.GetAllForRepository(gitHubOwner, gitlHubRepository).Result;
 
 				//TODO: Check if repository exists
@@ -69,6 +68,7 @@ namespace mvc_app.Classes
 					issueCollectionForRepo.GetAllForRepository(gitHubOwner, gitlHubRepository, _issuesOpenMoreThan7Days).Result;
 				this.IssuesOpenMoreThan7Days = issuesOpenMoreThan7Days.Count;
 
+				//Adds filtered issues to the collection to be returned
 				collectionOfIssues.Add(issuesAllOpenEver);
 				collectionOfIssues.Add(issuesOpeninLast24Hours);				
 				collectionOfIssues.Add(issuesOpenMoreThan7Days);
@@ -79,7 +79,6 @@ namespace mvc_app.Classes
 			{
 				throw;
 			}
-
 			return null;
 		}
 	}
