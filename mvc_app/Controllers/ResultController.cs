@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using mvc_app.Classes;
@@ -10,11 +11,7 @@ namespace mvc_app.Controllers
 	public class ResultController : Controller
 	{
 		//TODO: move static strings to web.config file
-		private readonly string GitHubUserOwner = "miguelmoreno";
-		private readonly string GitHubUserAgent = "-iH 'User-Agent: ' https://api.github.com/meta";
-		private readonly string GitHubRepository = "shippable";
-
-		private readonly string GitHubAccessToken = "fd34eff590b7053eb472bd4fd8d396eca68583aa";
+		
 
 		public ActionResult Result()
 		{
@@ -62,7 +59,7 @@ namespace mvc_app.Controllers
 					//TODO: any other error from GitHub render in error form
 
 					//var issueCollectionForRepo = client.Issue;
-					repository.RepositoryToken = "fd34eff590b7053eb472bd4fd8d396eca68583aa";
+					repository.RepositoryToken = ConfigurationManager.AppSettings["GitHubAccessToken"].ToString();
 
 					IssuesHelper IssuesHelper = new IssuesHelper();
 
