@@ -1,0 +1,23 @@
+﻿@{
+	ViewBag.Title = "Home Page";
+}
+
+<h2 class="header">Github project repository v0.1</h2>
+
+<fieldset>
+	<ul>
+		<li>
+			@model mvc_app.Models.RepositoryModel
+
+			@using (Html.BeginForm($"Index", $"Result", FormMethod.Post))
+
+			{
+				//passes the input GitHub repository URL into the form for the ResultController to interpret
+				@Html.TextBox("RepositoryUrl", @"https://github.com/miguelmoreno/shippable", new { style = "width: 400px;color: #666666;padding:5px;" }) ;
+
+				//submits the form
+				<input type="submit" value="Get issues" />
+			}
+		</li>
+	</ul>
+</fieldset>
